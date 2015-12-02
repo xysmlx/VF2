@@ -20,11 +20,13 @@
 #include <ctime>
 #include <cassert>
 #include <fstream>
+#include <direct.h>
 #include <algorithm>
 #include <functional>
 //#include <windows.h>
 using namespace std;
 typedef long long ll;
+typedef pair<int, int> prii;
 //#define pb push_back
 
 #endif
