@@ -22,7 +22,15 @@ void Solver::ReadFile(string path, vector<Graph> &vec)
 	int p, q;
 	while (getline(fin, buff))
 	{
-		if (buff == "t # -1") break;
+		//cout << buff << endl;
+		//getchar();
+		if (buff.size() == 0) continue;
+		if (buff == "t # -1")
+		{
+			if (n == 0) continue;
+			vec.push_back(tmp);
+			break;
+		}
 		if (buff[0] == 't')
 		{
 			sscanf(buff.c_str(), "t # %d", &n);
@@ -43,6 +51,8 @@ void Solver::ReadFile(string path, vector<Graph> &vec)
 		else puts("Error!");
 	}
 
+	//cout << vec.size() << endl;
+
 	fin.close();
 }
 
@@ -58,13 +68,13 @@ void Solver::ReadQuery(string path)
 
 void Solver::input()
 {
-	dbPath = "Data\mygraphdb.data";
-	queryPath.push_back("Q4.my");
-	queryPath.push_back("Q8.my");
-	queryPath.push_back("Q12.my");
-	queryPath.push_back("Q16.my");
-	queryPath.push_back("Q20.my");
-	queryPath.push_back("Q24.my");
+	dbPath = "Data/mygraphdb.data";
+	queryPath.push_back("Data/Q4.my");
+	queryPath.push_back("Data/Q8.my");
+	queryPath.push_back("Data/Q12.my");
+	queryPath.push_back("Data/Q16.my");
+	queryPath.push_back("Data/Q20.my");
+	queryPath.push_back("Data/Q24.my");
 
 	ReadDB(dbPath);
 	vf2.graph = DBGraph;
