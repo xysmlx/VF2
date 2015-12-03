@@ -103,15 +103,19 @@ void Solver::PrintQueryAns(int id, int cnt)
 	fout << "+++++" << endl;
 	fout << "Query ID: " << vf2.QueryID << endl;
 	fout << "Count: " << vf2.match.size() << endl;
-	for (int i = 0;i < (int)vf2.match.size();i++)
-	{
-		fout << "-----" << endl;
-		fout << "Graph ID: " << vf2.match[i].id << endl;
-		fout << "pat" << "\t" << "g" << endl;
-		for (int j = 0;j < (int)vf2.match[i].s.size();j++)
-			fout << vf2.match[i].s[i].first << "\t" << vf2.match[i].s[i].second << endl;
-		fout << "-----" << endl;
-	}
+
+	// Not output match details
+	//for (int i = 0;i < (int)vf2.match.size();i++)
+	//{
+	//	fout << "-----" << endl;
+	//	fout << "Graph ID: " << vf2.match[i].id << endl;
+	//	fout << "pat" << "\t" << "g" << endl;
+	//	// Not output match details
+	//	/*for (int j = 0;j < (int)vf2.match[i].s.size();j++)
+	//		fout << vf2.match[i].s[i].first << "\t" << vf2.match[i].s[i].second << endl;*/
+	//	fout << "-----" << endl;
+	//}
+
 	fout << "+++++" << endl;
 
 	fout << endl;

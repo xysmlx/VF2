@@ -17,12 +17,155 @@ void VF2::GenRevGraph(const Graph &src, Graph &dst)
 		dst.addse(src.edge[i].v, src.edge[i].u, src.edge[i].label);
 }
 
-bool VF2::check(const State &s, int a, int b)
+bool VF2::CheckPrev(const State &s, int a, int b)
 {
 	return 0;
 }
 
-bool VF2::dfs(State s)
+bool VF2::CheckSucc(const State &s, int a, int b)
+{
+	return 0;
+}
+
+bool VF2::CheckIn(const State &s, int a, int b)
+{
+	return 0;
+}
+
+bool VF2::CheckOut(const State &s, int a, int b)
+{
+	return 0;
+}
+
+bool VF2::CheckNew(const State &s, int a, int b)
+{
+	return 0;
+}
+
+bool VF2::check(const State &s, int a, int b)
+{
+	aSucc.clear();
+	aPrev.clear();
+	bSucc.clear();
+	bPrev.clear();
+	// aSucc
+	for (int i = pat.head[a];~i;i = pat.edge[i].next)
+		aSucc.push_back(pat.edge[i].v);
+	// aPrev
+	for (int i = revpat.head[a];~i;i = revpat.edge[i].next)
+		aPrev.push_back(revpat.edge[i].v);
+	// bSucc
+	for (int i = g.head[b];~i;i = g.edge[i].next)
+		bSucc.push_back(g.edge[i].v);
+	// bPrev
+	for (int i = revg.head[b];~i;i = revg.edge[i].next)
+		bPrev.push_back(revg.edge[i].v);
+
+	if (CheckPrev(s, a, b) && CheckSucc(s, a, b) && CheckIn(s, a, b)
+		&& CheckOut(s, a, b) && CheckNew(s, a, b)) return 1;
+	return 0;
+}
+
+void VF2::GenPairs(const State &s)
+{
+	flagIn = flagOut = flagAll = 0;
+	allPairs.clear();
+
+	vector<int> t1, t2;
+
+	t1.clear();
+	t2.clear();
+	for (int i = 0;i < pat.vn;i++)
+		if (s.out1[i]) t1.push_back(i);
+	for (int i = 0;i < g.vn;i++)
+		if (s.out2[i]) t2.push_back(i);
+	for (int i = 0;i < (int)t1.size();i++)
+		for (int j = 0;j < (int)t2.size();j++)
+			allPairs.push_back(make_pair(t1[i], t2[j]));
+	if (!allPairs.empty())
+	{
+		flagOut = 1;
+		return;
+	}
+
+	t1.clear();
+	t2.clear();
+	for (int i = 0;i < pat.vn;i++)
+		if (s.in1[i]) t1.push_back(i);
+	for (int i = 0;i < g.vn;i++)
+		if (s.in2[i]) t2.push_back(i);
+	for (int i = 0;i < (int)t1.size();i++)
+		for (int j = 0;j < (int)t2.size();j++)
+			allPairs.push_back(make_pair(t1[i], t2[j]));
+	if (!allPairs.empty())
+	{
+		flagIn = 1;
+		return;
+	}
+
+	t1.clear();
+	t2.clear();
+	for (int i = 0;i < pat.vn;i++)
+		if (s.core1[i] == -1) t1.push_back(i);
+	for (int i = 0;i < g.vn;i++)
+		if (s.core2[i] == -1) t2.push_back(i);
+	for (int i = 0;i < (int)t1.size();i++)
+		for (int j = 0;j < (int)t2.size();j++)
+			allPairs.push_back(make_pair(t1[i], t2[j]));
+	flagAll = 1;
+}
+
+void VF2::CheckPairs(const State &s)
+{
+	candiPairs.clear();
+
+	for (auto ite = allPairs.begin();ite != allPairs.end();ite++)
+		if (check(s, ite->first, ite->second)) candiPairs.push_back(*ite);
+}
+
+void VF2::UpdateState(State &s, int a, int b)
+{
+	// Update core,in,out
+	for (int i = 0;i < pat.vn;i++)
+	{
+		s.core1[a] = b;
+		s.in1[a] = 0;
+		s.out1[a] = 0;
+	}
+	for (int i = 0;i < g.vn;i++)
+	{
+		s.core2[b] = a;
+		s.in2[b] = 0;
+		s.out2[b] = 0;
+	}
+
+	// Add new out1
+	for (int i = pat.head[a];~i;i = pat.edge[i].next)
+	{
+		int v = pat.edge[i].v;
+		if (s.core1[v] == -1) s.out1[v] = 1;
+	}
+	// Add new in1
+	for (int i = revpat.head[a];~i;i = revpat.edge[i].next)
+	{
+		int v = revpat.edge[i].v;
+		if (s.core1[v] == -1) s.in1[v] = 1;
+	}
+	// Add new out2
+	for (int i = g.head[b];~i;i = g.edge[i].next)
+	{
+		int v = g.edge[i].v;
+		if (s.core2[v] == -1) s.out2[v] = 1;
+	}
+	// Add new in2
+	for (int i = revg.head[b];~i;i = revg.edge[i].next)
+	{
+		int v = revg.edge[i].v;
+		if (s.core2[v] == -1) s.in2[v] = 1;
+	}
+}
+
+bool VF2::dfs(const State &s)
 {
 	// Matched
 	if ((int)s.s.size() == pat.vn)
@@ -32,49 +175,18 @@ bool VF2::dfs(State s)
 	}
 
 	// Generate Pair(n,m)
-	vector<int> tQ, tDB;
-	bool visQ[Graph::maxv], visDB[Graph::maxv];
-	memset(visQ, 0, sizeof(visQ));
-	memset(visDB, 0, sizeof(visDB));
-	// Cal tQ
-	for (int _ = 0;_ < pat.vn;_++)
-	{
-		for (int i = pat.head[_];~i;i = pat.edge[i].next)
-		{
-			int v = pat.edge[i].v;
-			if (!s.visQ[v]) visQ[v] = 1;
-		}
-	}
-	for (int i = 0;i < pat.vn;i++)
-		if (visQ[i]) tQ.push_back(i);
-	//Cal tDB
-	for (int _ = 0;_ < g.vn;_++)
-	{
-		for (int i = g.head[_];~i;i = g.edge[i].next)
-		{
-			int v = g.edge[i].v;
-			if (!s.visDB[v]) visDB[v] = 1;
-		}
-	}
-	for (int i = 0;i < g.vn;i++)
-		if (visDB[i]) tDB.push_back(i);
-	// Solve tQ empty
-	if (tQ.empty())
-	{
-		for (int i = 0;i < pat.vn;i++)
-			if (!s.visQ[i]) tQ.push_back(i);
-	}
-	// Solve tDB empty
-	if (tDB.empty())
-	{
-		for (int i = 0;i < g.vn;i++)
-			if (!s.visDB[i]) tDB.push_back(i);
-	}
+	GenPairs(s);
+	// Check allPairs, get candiPairs
+	CheckPairs(s);
 
 	// Next recursive
-	for (int i = 0;i < (int)tDB.size();i++)
+	for (auto ite = candiPairs.begin();ite != candiPairs.end();ite++)
 	{
-		//
+		State ns = s;
+		int a = ite->first;
+		int b = ite->second;
+		UpdateState(ns, a, b);
+		dfs(ns);
 	}
 
 	return 0;
