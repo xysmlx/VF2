@@ -74,7 +74,9 @@ class VF2
     vector<int> m1, m2;            // M_1, M_2
     vector<int> tin1, tin2;        // Tin_1,Tin_2
     vector<int> tout1, tout2;      // Tout_1,Tout_2
-    vector<int> n2, n2;            // N_1, N_2
+    vector<int> n1, n2;            // N_1, N_2
+    vector<int> ns1, ns2;          // Point set of pat & g
+    vector<int> t1, t2;            // tin+tout
 
     Graph pat, g;       // Pattern & DBGraph
     Graph revpat, revg; // Reversed Pattern & DBGraph

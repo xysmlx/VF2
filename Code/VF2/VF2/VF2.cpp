@@ -52,6 +52,10 @@ void VF2::CalDFSVec(const State &s)
     tout2.clear();
     n1.clear();
     n2.clear();
+    ns1.clear();
+    ns2.clear();
+    t1.clear();
+    t2.clear();
 
     for (auto ite = s.s.begin(); ite != s.s.end(); ite++)
     {
@@ -74,6 +78,16 @@ void VF2::CalDFSVec(const State &s)
     for (int i = 0; i < g.vn; i++)
         if (s.in2[i])
             tin2.push_back(i);
+
+    for (int i = 0; i < pat.vn; i++)
+        ns1.push_back(i);
+    for (int i = 0; i < g.vn; i++)
+        ns2.push_back(i);
+
+    set_union(tin1.begin(), tin1.end(), tout1.begin(), tout1.end(), t1.begin());
+    set_union(tin1.begin(), tin1.end(), tout2.begin(), tout2.end(), t2.begin());
+
+    vector<int> tmp(Graph::maxv);
 
     sort(n1.begin(), n1.end());
     sort(n2.begin(), n2.end());
@@ -99,6 +113,9 @@ void VF2::CalCheckVec(const State &s, int a, int b)
     // bSucc
     for (int i = g.head[b]; ~i; i = g.edge[i].next)
         succ2.push_back(g.edge[i].v);
+
+    vector<int> tmp;
+    tmp = ;
 
     // Sort
     sort(pred1.begin(), pred1.end());
