@@ -1,5 +1,7 @@
 # VF2
 
+A (Sub)Graph Isomorphism Algorithm for Matching Large Graphs written in C++.
+
 Course assignment of Massive Graph Data Management of Peking University.
 
 * Author: xysmlx
@@ -10,6 +12,7 @@ Course assignment of Massive Graph Data Management of Peking University.
 Provide Visual Studio Project
 
 Require:
+
 * Microsoft Visual Studio 2015
 * C++ 11 support
 
