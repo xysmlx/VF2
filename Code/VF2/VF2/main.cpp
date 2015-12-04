@@ -24,7 +24,7 @@ void output()
 
 int main()
 {
-	freopen("debug.txt", "w", stdout);
+	//freopen("debug.txt", "w", stdout);
 	init();
 	input();
 	solve();

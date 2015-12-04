@@ -2,6 +2,10 @@
 
 void Solver::init()
 {
+	ofstream fout;
+	fout.open("time.txt");
+	fout.close();
+
 	queryPath.clear();
 	DBGraph.clear();
 	QueryGraph.clear();
@@ -108,8 +112,9 @@ void Solver::PrintQueryAns(int id, int cnt)
 	fout << "Count: " << vf2.match.size() << endl;
 
 	// Not output match details
+	fout << "Match List:" << endl;
 	for (int i = 0;i < (int)vf2.match.size();i++)
-		fout << "Mathch: " << vf2.QueryID << " " << vf2.match[i].id << endl;
+		fout << vf2.QueryID << " " << vf2.match[i].id << endl;
 
 	// Output match details
 	//for (int i = 0;i < (int)vf2.match.size();i++)
@@ -133,15 +138,29 @@ void Solver::PrintQueryAns(int id, int cnt)
 void Solver::solve()
 {
 	vf2.init(DBGraph);
+
+	ofstream ftimeout;
+	ftimeout.open("time.txt", ios::app);
+
 	for (int _ = 0;_ < (int)queryPath.size();_++)
 	{
 		ReadQuery(queryPath[_]);
+
+		time_t stTime = clock();
 		for (int i = 0;i < (int)QueryGraph.size();i++)
 		{
+			cout <<"Query "<< queryPath[_] << ": " << i << endl;
 			int cnt = vf2.vf2(QueryGraph[i], i);
 			PrintQueryAns(_, cnt);
 		}
+		time_t edTime = clock();
+		double dur = (double)(edTime - stTime) / 1000.0;
+
+		ftimeout << queryPath[_] << " Time: " << dur << endl;
+		cout << queryPath[_] << " Time: " << dur << endl;
 	}
+
+	ftimeout.close();
 }
 
 void Solver::output()

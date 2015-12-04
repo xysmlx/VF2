@@ -521,7 +521,7 @@ int VF2::vf2(const Graph &QG, const int &QID)
 		GenRevGraph(g, revg);
 		if (query()) // Matched
 		{
-			cout << "Matched: " << QID << " " << i << endl;
+			//cout << QID << " " << i << endl;
 			//match.push_back(Match(tlist, i));
 			ret++;
 		}
