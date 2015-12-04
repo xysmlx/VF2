@@ -10,6 +10,7 @@ void VF2::init(const vector<Graph> &db)
 void VF2::GenRevGraph(const Graph &src, Graph &dst)
 {
 	dst = Graph();
+
 	for (int i = 0; i < src.vn; i++)
 		dst.addv(src.vtx[i].id, src.vtx[i].label);
 
@@ -415,14 +416,21 @@ void VF2::UpdateState(State &s, int a, int b)
 
 bool VF2::FinalCheck(const State &s)
 {
+	/*puts("12312312312");
+	for (auto ite = s.s.begin();ite != s.s.end();ite++)
+		cout << ite->first << " " << ite->second << endl;*/
 	for (int i = 0;i < pat.en;i++)
 	{
 		Edge e1 = pat.edge[i];
+		//cout << "Edge1: " << e1.u << " " << e1.v << " " << e1.label << endl;
 		bool flag = 0;
+		//cout << s.core1[e1.u] << endl;
+		//if (s.core1[e1.u] == -1) return 0;
 		for (int j = g.head[s.core1[e1.u]];~j;j = g.edge[j].next)
 		{
 			Edge e2 = g.edge[j];
-			if (e1 == e2)
+			//cout << "Edge2: " << e2.u << " " << e2.v << " " << e2.label << endl;
+			if (e1.label == e2.label&&s.core1[e1.v]==e2.v)
 			{
 				flag = 1;
 				break;
@@ -440,7 +448,7 @@ bool VF2::dfs(const State &s)
 	{
 		if (FinalCheck(s))
 		{
-			puts("Matched!");
+			//puts("Matched!");
 			tlist = s.s;
 			return 1;
 		}
@@ -509,10 +517,12 @@ int VF2::vf2(const Graph &QG, const int &QID)
 	for (int i = 0; i < (int)DBGraph.size(); i++)
 	{
 		g = DBGraph[i];
+		if (pat.vn > g.vn || pat.en > g.en) continue;
 		GenRevGraph(g, revg);
 		if (query()) // Matched
 		{
-			match.push_back(Match(tlist, i));
+			cout << "Matched: " << QID << " " << i << endl;
+			//match.push_back(Match(tlist, i));
 			ret++;
 		}
 	}

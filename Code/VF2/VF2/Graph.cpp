@@ -3,6 +3,7 @@
 void Graph::init()
 {
 	memset(head, -1, sizeof(head));
+	vn = 0;
 	en = 0;
 }
 

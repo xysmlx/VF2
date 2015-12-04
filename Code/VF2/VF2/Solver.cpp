@@ -108,6 +108,10 @@ void Solver::PrintQueryAns(int id, int cnt)
 	fout << "Count: " << vf2.match.size() << endl;
 
 	// Not output match details
+	for (int i = 0;i < (int)vf2.match.size();i++)
+		fout << "Mathch: " << vf2.QueryID << " " << vf2.match[i].id << endl;
+
+	// Output match details
 	//for (int i = 0;i < (int)vf2.match.size();i++)
 	//{
 	//	fout << "-----" << endl;
