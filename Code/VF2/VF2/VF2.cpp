@@ -430,7 +430,7 @@ bool VF2::FinalCheck(const State &s)
 		{
 			Edge e2 = g.edge[j];
 			//cout << "Edge2: " << e2.u << " " << e2.v << " " << e2.label << endl;
-			if (e1.label == e2.label&&s.core1[e1.v]==e2.v)
+			if (e1.label == e2.label&&s.core1[e1.v] == e2.v)
 			{
 				flag = 1;
 				break;
