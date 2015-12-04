@@ -41,8 +41,8 @@ public:
 	VF2() {}
 	void init(const vector<Graph> &db);             // Init the VF2 class
 	void GenRevGraph(const Graph &src, Graph &dst); // Generate reversed graph
-	bool CheckPrev(const State &s);					// Prev
-	bool CheckSucc(const State &s);   				// Succ
+	bool CheckPrev(const State &s, int a, int b);	// Prev
+	bool CheckSucc(const State &s, int a, int b);   // Succ
 	bool CheckIn(const State &s);     				// In
 	bool CheckOut(const State &s);    				// Out
 	bool CheckNew(const State &s);    				// New
@@ -52,6 +52,7 @@ public:
 	void GenPairs(const State &s);                  // Generate all pairs to var allPairs
 	void CheckPairs(const State &s);                // Check allPairs, return candiPairs
 	void UpdateState(State &s, int a, int b);       // Update state ns with pair(a,b)
+	bool FinalCheck(const State &s);				// Final check for answer
 	bool dfs(const State &s);                       // VF2 dfs (recursive)
 	bool query();                                   // Run VF2 on pat & g (main procedure)
 	int vf2(const Graph &QG, const int &QID);       // Run VF2 on QueryGraph & DBGraph (engine)

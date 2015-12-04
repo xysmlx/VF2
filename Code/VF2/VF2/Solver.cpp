@@ -68,19 +68,20 @@ void Solver::ReadQuery(string path)
 void Solver::input()
 {
 	// Standard data set
-	//dbPath = "Data/mygraphdb.data";
-	//queryPath.push_back("Data/Q4.my");
-	//queryPath.push_back("Data/Q8.my");
-	//queryPath.push_back("Data/Q12.my");
-	//queryPath.push_back("Data/Q16.my");
-	//queryPath.push_back("Data/Q20.my");
-	//queryPath.push_back("Data/Q24.my");
+	dbPath = "Data/mygraphdb.data";
+	queryPath.push_back("Data/Q4.my");
+	queryPath.push_back("Data/Q8.my");
+	queryPath.push_back("Data/Q12.my");
+	queryPath.push_back("Data/Q16.my");
+	queryPath.push_back("Data/Q20.my");
+	queryPath.push_back("Data/Q24.my");
 
 	// Test data set
-	dbPath = "db.txt";
-	queryPath.push_back("query.txt");
+	/*dbPath = "db.txt";
+	queryPath.push_back("query.txt");*/
 
 	// Output path: ./Output/ans_.txt
+	_rmdir("Output");
 	_mkdir("Output");
 	string tt = "Output/ans";
 	for (int i = 0;i < (int)queryPath.size();i++)
@@ -93,6 +94,8 @@ void Solver::input()
 	}
 
 	ReadDB(dbPath);
+
+	puts("Read Data Finished!");
 }
 
 void Solver::PrintQueryAns(int id, int cnt)

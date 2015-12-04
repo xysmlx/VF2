@@ -17,7 +17,7 @@ void VF2::GenRevGraph(const Graph &src, Graph &dst)
 		dst.addse(src.edge[i].v, src.edge[i].u, src.edge[i].label);
 }
 
-bool VF2::CheckPrev(const State &s)
+bool VF2::CheckPrev(const State &s, int a, int b)
 {
 	vector<int> tmp;
 	bool flag;
@@ -30,7 +30,16 @@ bool VF2::CheckPrev(const State &s)
 	{
 		flag = 0;
 		for (auto ite2 = pred2.begin();ite2 != pred2.end() && !flag;ite2++)
-			if (s.core1[*ite1] == *ite2) flag = 1;
+			if (s.core1[*ite1] == *ite2)
+			{
+				/*int i = -1, j = -1;
+				for (i = pat.head[*ite1];~i;i = pat.edge[i].next)
+					if (pat.edge[i].v == a) break;
+				for (int j = g.head[*ite2];~j;j = g.edge[j].next)
+					if (g.edge[j].v == b) break;
+				if (pat.edge[i].label == g.edge[j].label) flag = 1;*/
+				flag = 1;
+			}
 		if (!flag) return 0;
 	}
 
@@ -41,14 +50,23 @@ bool VF2::CheckPrev(const State &s)
 	{
 		flag = 0;
 		for (auto ite1 = pred1.begin();ite1 != pred1.end() && !flag;ite1++)
-			if (s.core2[*ite2] == *ite1) flag = 1;
+			if (s.core2[*ite2] == *ite1)
+			{
+				/*int i = -1, j = -1;
+				for (i = pat.head[*ite1];~i;i = pat.edge[i].next)
+					if (pat.edge[i].v == a) break;
+				for (int j = g.head[*ite2];~j;j = g.edge[j].next)
+					if (g.edge[j].v == b) break;
+				if (pat.edge[i].label == g.edge[j].label) flag = 1;*/
+				flag = 1;
+			}
 		if (!flag) return 0;
 	}
 
 	return 1;
 }
 
-bool VF2::CheckSucc(const State &s)
+bool VF2::CheckSucc(const State &s, int a, int b)
 {
 	vector<int> tmp;
 	bool flag;
@@ -61,7 +79,16 @@ bool VF2::CheckSucc(const State &s)
 	{
 		flag = 0;
 		for (auto ite2 = succ2.begin();ite2 != succ2.end() && !flag;ite2++)
-			if (s.core1[*ite1] == *ite2) flag = 1;
+			if (s.core1[*ite1] == *ite2)
+			{
+				/*int i = -1, j = -1;
+				for (i = revpat.head[*ite1];~i;i = revpat.edge[i].next)
+					if (revpat.edge[i].v == a) break;
+				for (int j = revg.head[*ite2];~j;j = revg.edge[j].next)
+					if (revg.edge[j].v == b) break;
+				if (revpat.edge[i].label == revg.edge[j].label) flag = 1;*/
+				flag = 1;
+			}
 		if (!flag) return 0;
 	}
 
@@ -72,7 +99,16 @@ bool VF2::CheckSucc(const State &s)
 	{
 		flag = 0;
 		for (auto ite1 = succ1.begin();ite1 != succ1.end() && !flag;ite1++)
-			if (s.core2[*ite2] == *ite1) flag = 1;
+			if (s.core2[*ite2] == *ite1)
+			{
+				/*int i = -1, j = -1;
+				for (i = revpat.head[*ite1];~i;i = revpat.edge[i].next)
+					if (revpat.edge[i].v == a) break;
+				for (int j = revg.head[*ite2];~j;j = revg.edge[j].next)
+					if (revg.edge[j].v == b) break;
+				if (revpat.edge[i].label == revg.edge[j].label) flag = 1;*/
+				flag = 1;
+			}
 		if (!flag) return 0;
 	}
 
@@ -105,7 +141,7 @@ bool VF2::CheckIn(const State &s)
 	tmp.erase(ite, tmp.end());
 	d = tmp.size();
 
-	return (a >= b) && (c >= d);
+	return (a <= b) && (c <= d);
 }
 
 bool VF2::CheckOut(const State &s)
@@ -134,7 +170,7 @@ bool VF2::CheckOut(const State &s)
 	tmp.erase(ite, tmp.end());
 	d = tmp.size();
 
-	return (a >= b) && (c >= d);
+	return (a <= b) && (c <= d);
 }
 
 bool VF2::CheckNew(const State &s)
@@ -163,7 +199,7 @@ bool VF2::CheckNew(const State &s)
 	tmp.erase(ite, tmp.end());
 	d = tmp.size();
 
-	return (a >= b) && (c >= d);
+	return (a <= b) && (c <= d);
 }
 
 void VF2::CalDFSVec(const State &s)
@@ -266,11 +302,16 @@ void VF2::CalCheckVec(const State &s, int a, int b)
 
 bool VF2::check(const State &s, int a, int b)
 {
-	if (pat.vtx[a].label != g.vtx[b].label) return 0; // Check label
+	// Check vertex label
+	if (pat.vtx[a].label != g.vtx[b].label) return 0;
+
+	// Check edge label
+	//vector<int> 
 
 	CalCheckVec(s, a, b);
 
-	if (CheckPrev(s) && CheckSucc(s) && CheckIn(s) && CheckOut(s) && CheckNew(s)) return 1;
+	// Feasibility
+	if (CheckPrev(s, a, b) && CheckSucc(s, a, b) && CheckIn(s) && CheckOut(s) && CheckNew(s)) return 1;
 	return 0;
 }
 
@@ -372,13 +413,37 @@ void VF2::UpdateState(State &s, int a, int b)
 	s.s.push_back(make_pair(a, b));
 }
 
+bool VF2::FinalCheck(const State &s)
+{
+	for (int i = 0;i < pat.en;i++)
+	{
+		Edge e1 = pat.edge[i];
+		bool flag = 0;
+		for (int j = g.head[s.core1[e1.u]];~j;j = g.edge[j].next)
+		{
+			Edge e2 = g.edge[j];
+			if (e1 == e2)
+			{
+				flag = 1;
+				break;
+			}
+		}
+		if (!flag) return 0;
+	}
+	return 1;
+}
+
 bool VF2::dfs(const State &s)
 {
 	// Matched
 	if ((int)s.s.size() == pat.vn)
 	{
-		tlist = s.s;
-		return 1;
+		if (FinalCheck(s))
+		{
+			puts("Matched!");
+			tlist = s.s;
+			return 1;
+		}
 	}
 
 	// Generate Pair(n,m)
@@ -386,7 +451,14 @@ bool VF2::dfs(const State &s)
 	// Check allPairs, get candiPairs
 	CheckPairs(s);
 
+	// For tmp dfs store
 	vector<prii> vec = candiPairs;
+	vector<int> m1t, m2t;
+	vector<int> tin1t, tin2t;
+	vector<int> tout1t, tout2t;
+	vector<int> n1t, n2t;
+	vector<int> ns1t, ns2t;
+	vector<int> t1t, t2t;
 
 	//cout << vec.size() << endl;
 
@@ -397,7 +469,24 @@ bool VF2::dfs(const State &s)
 		int a = ite->first;
 		int b = ite->second;
 		UpdateState(ns, a, b);
-		dfs(ns);
+
+		m1t = m1, m2t = m2;
+		tin1t = tin1, tin2t = tin2;
+		tout1t = tout1, tout2t = tout2;
+		n1t = n1, n2t = n2;
+		ns1t = ns1, ns2t = ns2;
+		t1t = t1, t2t = t2;
+
+		bool ret = dfs(ns);
+
+		m1 = m1t, m2 = m2t;
+		tin1 = tin1t, tin2 = tin2t;
+		tout1 = tout1t, tout2 = tout2t;
+		n1 = n1t, n2 = n2t;
+		ns1 = ns1t, ns2 = ns2t;
+		t1 = t1t, t2 = t2t;
+
+		if (ret) return 1;
 	}
 
 	return 0;
