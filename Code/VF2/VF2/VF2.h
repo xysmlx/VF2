@@ -40,6 +40,9 @@ public:
 public:
 	VF2() {}
 	void init(const vector<Graph> &db);             // Init the VF2 class
+	int vf2(const Graph &QG, const int &QID);       // Run VF2 on QueryGraph & DBGraph (engine)
+
+private:
 	void GenRevGraph(const Graph &src, Graph &dst); // Generate reversed graph
 	bool CheckPrev(const State &s, int a, int b);	// Prev
 	bool CheckSucc(const State &s, int a, int b);   // Succ
@@ -55,7 +58,6 @@ public:
 	bool FinalCheck(const State &s);				// Final check for answer
 	bool dfs(const State &s);                       // VF2 dfs (recursive)
 	bool query();                                   // Run VF2 on pat & g (main procedure)
-	int vf2(const Graph &QG, const int &QID);       // Run VF2 on QueryGraph & DBGraph (engine)
 
 public:
 	vector<Graph> DBGraph; // Graph database

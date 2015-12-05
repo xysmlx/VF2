@@ -1,0 +1,510 @@
+\documentclass[a4paper,12pt]{article}
+\usepackage[top=2.54cm, bottom=2.54cm, left=3.18cm, right=3.18cm]{geometry}
+\usepackage{ctex}
+\usepackage[colorlinks,bookmarksnumbered=true,bookmarksopen=true,CJKbookmarks=true,linkcolor=red,anchorcolor=black,citecolor=black]{hyperref}
+\usepackage{amsthm}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{ccmap}
+\usepackage{listings}
+\usepackage{color}
+\usepackage{bbding}
+\usepackage{url}
+\usepackage{movie15}
+\usepackage{booktabs,longtable}
+\usepackage{mdwlist}
+\usepackage{subfigure}
+\usepackage{pifont}
+\usepackage{epstopdf}
+\usepackage{float}
+\usepackage{titlesec}
+\usepackage[labelsep=space]{caption}
+\usepackage{multirow,paralist}
+\usepackage[title,titletoc]{appendix}
+\usepackage[svgnames,x11names]{xcolor}
+\usepackage[titles,subfigure]{tocloft}
+\usepackage{fancyhdr}
+\usepackage{lastpage}
+\pagestyle{fancy}
+%\renewcommand{\headrulewidth}{1pt}  %页眉线宽，设为0可以去页眉线
+\lhead{\small{VF2算法实验报告}}
+\chead{}
+\rhead{\small{马凌霄(1501111302)}}
+\lfoot{}
+\cfoot{}
+\rfoot{Page \thepage\ of \pageref{LastPage}}
+
+  \def\CU@definezihao#1#2#3{
+  \def#1{\fontsize{#2}{#3}\selectfont}}
+
+\CU@definezihao{\zihaochu}{42}{50}
+\CU@definezihao{\zihaoxiaochu}{36}{44}
+\CU@definezihao{\zihaoyi}{28}{34}
+\CU@definezihao{\zihaoer}{22}{26}
+\CU@definezihao{\zihaoxiaoer}{18}{22}
+\CU@definezihao{\zihaosan}{15.7}{19}
+\CU@definezihao{\zihaosi}{14}{17}
+\CU@definezihao{\zihaoxiaosi}{12}{14}
+\CU@definezihao{\zihaowu}{10.5}{12}
+\CU@definezihao{\zihaoxiaowu}{9}{11}
+\CU@definezihao{\zihaoliu}{7.875}{9}
+\CU@definezihao{\zihaoqi}{5.25}{6}
+
+\titleformat{\section}{\zihaosi\bfseries}{$\S\;$\thesection}{1em}{}
+\titleformat{\subsection}{\zihaoxiaosi\bfseries}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}{\zihaoxiaosi\bfseries}{\thesubsubsection}{1em}{}
+
+\usepackage{tabularx}
+\newcommand{\PreserveBackslash}[1]{\let \temp =\\#1 \let \\ = \temp}
+\newcolumntype{C}[1]{>{\PreserveBackslash\centering}p{#1}}
+\newcolumntype{R}[1]{>{\PreserveBackslash\raggedleft}p{#1}}
+\newcolumntype{L}[1]{>{\PreserveBackslash\raggedright}p{#1}}
+
+\usepackage[linesnumbered,ruled]{algorithm2e}
+\renewcommand{\algorithmcfname}{算法}
+
+\theoremstyle{definition}
+\newtheorem{defn}{定义}
+\SetKwProg{Fn}{Function}{:}{end}
+
+\usepackage{xcolor}
+
+%\renewcommand{\figurename}{\zihaowu{Figure}}
+
+\makeatletter
+  \newcommand\figcaption{\def\@captype{figure}\caption}
+  \newcommand\tabcaption{\def\@captype{table}\caption}
+\makeatother
+
+\usepackage{listings}
+\lstset{tabsize=4, %
+  frame=single, %把代码用带有阴影的框圈起来
+  keywordstyle=\color[rgb]{0,0,1},
+  commentstyle=\color[rgb]{0.133,0.545,0.133},
+  stringstyle=\color[rgb]{0.627,0.126,0.941},
+  %commentstyle=\color{red!50!green!50!blue!50},% 浅灰色的注释
+  rulesepcolor=\color{red!20!green!20!blue!20},% 代码块边框为淡青色
+  %keywordstyle=\color{blue!90}\bfseries, %代码关键字的颜色为蓝色，粗体
+  showstringspaces=false,% 不显示代码字符串中间的空格标记
+  stringstyle=\ttfamily, % 代码字符串的特殊格式
+  keepspaces=true, %
+  breakindent=22pt, %
+  numbers=left,%左侧显示行号
+  stepnumber=1,%
+  numberstyle=\footnotesize, %行号字体用小号
+  basicstyle=\footnotesize, %
+  showspaces=false, %
+  flexiblecolumns=true, %
+  breaklines=true, % 对过长的代码自动换行
+  breakautoindent=true,%
+  breakindent=4em, %
+  escapebegin=\begin{CJK*}{GBK}{hei},escapeend=\end{CJK*},
+  aboveskip=1em, %代码块边框
+  %% added by http://bbs.ctex.org/viewthread.php?tid=53451
+  fontadjust,
+  captionpos=t,
+  framextopmargin=2pt,framexbottommargin=2pt,abovecaptionskip=-3pt,belowcaptionskip=3pt,
+  xleftmargin=4em,xrightmargin=4em, % 设定listing左右的空白
+  texcl=true,
+  % 设定中文冲突，断行，列模式，数学环境输入，listing 数字的样式
+  extendedchars=false,columns=flexible,mathescape=true
+  % numbersep=-1em
+}
+\renewcommand{\figurename}{\zihaowu{图}}
+\renewcommand{\tablename}{\zihaowu{表}}
+\renewcommand{\abstractname}{\zihaoxiaosi{摘 \qquad 要}}
+\renewcommand{\contentsname}{\centerline{\Large 目 \qquad 录}}
+\renewcommand{\refname}{\centerline{\Large 参考文献}}
+%\pagestyle{headings}
+\begin{document}
+\title{VF2算法实验报告}
+\author{海量图数据的管理和挖掘}
+\date{\today}
+\maketitle
+\ \\
+\noindent\textbf{
+作者：马凌霄\\
+学号：1501111302\\
+院系：信息科学技术学院\\
+EMail：xysmlx@gmail.com\\
+Repository (Private): \url{https://bitbucket.org/xysmlx/vf2}\\
+Git (Remote): \url{https://xysmlx@bitbucket.org/xysmlx/vf2.git}
+}
+
+\ \\
+\begin{center}
+  \includegraphics[width=400 pt]{repo.jpg}
+\end{center}
+\newpage
+\tableofcontents
+\newpage
+
+\section{VF2算法简介}
+VF2是子图匹配的算法，子图匹配的定义如定义\ref{def:subgraphiso}所示。VF2的流程用一句话概括，就是搜素+剪枝。其算法的主框架如算法\ref{alg:vf2}所示。其剪枝的方法如式\ref{equ:vf21}-\ref{equ:vf25}所示。
+
+\begin{defn}
+a
+\label{def:subgraphiso}
+\end{defn}
+
+
+
+
+\section{程序实现}
+\subsection{图-类：class Graph}
+\subsubsection{定义代码}
+\begin{lstlisting}[language=c++]
+struct Vertex
+{
+	int id;
+	int label;
+	int seq;
+	bool del;
+
+	Vertex(int _id = 0, int _label = 0) : id(_id), label(_label), seq(-1), del(0) {}
+	~Vertex() {}
+};
+
+struct Edge
+{
+	int u;
+	int v;
+	int label;
+	int next;
+	bool del;
+
+	Edge(int _u = 0, int _v = 0, int _label = 0, int _next = -1) : u(_u), v(_v), label(_label), next(_next), del(0) {}
+	~Edge() {}
+
+	bool operator == (const Edge &o) const
+	{
+		return u == o.u&&v == o.v&&label == o.label;
+	}
+};
+
+class Graph
+{
+public:
+	Graph()
+	{
+		memset(head, -1, sizeof(head));
+		vn = 0;
+		en = 0;
+	}
+	~Graph() {}
+
+	void init();
+	void addv(int id, int label);
+	void addse(int u, int v, int label);
+	void adde(int u, int v, int label);
+	void delse(int u, int v, int label);
+	void dele(int u, int v, int label);
+
+public:
+	const static int maxv = 250;
+	const static int maxe = 510;
+
+public:
+	int head[maxv];
+	int vn;
+	int en;
+	Vertex vtx[maxv]; // 0 to vn-1
+	Edge edge[maxe]; // 0 to en-1
+};
+\end{lstlisting}
+\subsubsection{设计}
+图的存储使用链式前向星来存储。链式前向星的效率高于使用$vector$写的邻接表。
+
+链式前向星的标准设计是：
+\begin{itemize}
+  \item $head[]$数组：大小为顶点数，存这个点的对应的第一条边在$edge[]$数组的下标
+  \item $edge[]$数组：用数组存储边
+  \item $Edge$边的结构：边的节点$u, v$，边的标号$label$，删除标记$del$，下一个访问的边的下标$next$
+  \item 添加边：
+  \begin{verbatim}
+void Graph::addv(int id, int label)
+{
+    vtx[id] = Vertex(id, label);
+    vn++;
+}
+void Graph::addse(int u, int v, int label)
+{
+    edge[en] = Edge(u, v, label, head[u]);
+    head[u] = en++;
+}
+  \end{verbatim}
+  \item 访问一个定点的所有边
+\begin{verbatim}
+for (int i = head[u]; ~i; i = edge[i].next)
+{
+    Edge e = edge[i];
+    // Solve this edge
+}
+\end{verbatim}
+  \item 删除边：令边的$del=1$，由于边$i$和边$i^1$互为反向边，所以直接遍历一次即可。
+\begin{verbatim}
+void Graph::dele(int u, int v, int label)
+{
+    for (int i = head[u];~i;i = edge[i].next)
+        if (edge[i].u == u&&edge[i].v == v&&edge[i].label == label)
+        {
+            edge[i].del = 1;
+            edge[i ^ 1].del = 1;
+            return;
+        }
+}
+\end{verbatim}
+\end{itemize}
+
+图里面用数组存储节点的访问顺序和点的标号，用链式前向星存储图的结构。
+
+\subsection{VF2算法-类：VF2}
+
+\subsubsection{定义代码}
+\begin{lstlisting}[language=c++]
+class VF2
+{
+public:
+	struct State // State of dfs matching
+	{
+		vector<prii> s; // Store matched pairs
+		// Same means with the paper
+		int core1[Graph::maxv]; // core1[n] = m or -1
+		int core2[Graph::maxv]; // core2[m] = n or -1
+		bool in1[Graph::maxv];
+		bool in2[Graph::maxv];
+		bool out1[Graph::maxv];
+		bool out2[Graph::maxv];
+		State()
+		{
+			s.clear();
+			memset(core1, -1, sizeof(core1));
+			memset(core2, -1, sizeof(core2));
+			memset(in1, 0, sizeof(in1));
+			memset(in2, 0, sizeof(in2));
+			memset(out1, 0, sizeof(out1));
+			memset(out2, 0, sizeof(out2));
+		}
+	};
+
+	struct Match // Store match
+	{
+		vector<prii> s; // match
+		int id;         // graphDB id
+		Match() {}
+		Match(vector<prii> _s, int _id) : s(_s), id(_id) {}
+	};
+
+public:
+	VF2() {}
+	void init(const vector<Graph> &db);             // Init the VF2 class
+	int vf2(const Graph &QG, const int &QID);       // Run VF2 on QueryGraph \& DBGraph (engine)
+
+private:
+	void GenRevGraph(const Graph &src, Graph &dst); // Generate reversed graph
+	bool CheckPrev(const State &s, int a, int b);	// Prev
+	bool CheckSucc(const State &s, int a, int b);   // Succ
+	bool CheckIn(const State &s);     				// In
+	bool CheckOut(const State &s);    				// Out
+	bool CheckNew(const State &s);    				// New
+	void CalDFSVec(const State &s);                 // Cal all temp vec per dfs
+	void CalCheckVec(const State &s, int a, int b); // Cal all temp vec per check
+	bool check(const State &s, int a, int b);       // Check feasibility
+	void GenPairs(const State &s);                  // Generate all pairs to var allPairs
+	void CheckPairs(const State &s);                // Check allPairs, return candiPairs
+	void UpdateState(State &s, int a, int b);       // Update state ns with pair(a,b)
+	bool FinalCheck(const State &s);				// Final check for answer
+	bool dfs(const State &s);                       // VF2 dfs (recursive)
+	bool query();                                   // Run VF2 on pat \& g (main procedure)
+
+public:
+	vector<Graph> DBGraph; // Graph database
+	Graph QueryGraph;      // Graph for query, pattern
+	int QueryID;           // Store the Query ID
+
+	vector<Match> match; // Store the matched graph info
+
+private:
+	// Temp var
+	vector<prii> tlist;            // Store temp list of match
+	vector<prii> allPairs;         // Generated pairs
+	vector<prii> candiPairs;       // Candidate pairs pass check()
+	bool flagIn, flagOut, flagAll; // Flags
+	vector<int> pred1, pred2;      // Pred of a in pat \& b in g
+	vector<int> succ1, succ2;      // Succ of a in pat \& b in g
+	vector<int> m1, m2;            // M\_1, M\_2
+	vector<int> tin1, tin2;        // Tin\_1,Tin\_2
+	vector<int> tout1, tout2;      // Tout\_1,Tout\_2
+	vector<int> n1, n2;            // N\_1, N\_2
+	vector<int> ns1, ns2;          // Point set of pat \& g
+	vector<int> t1, t2;            // tin+tout
+
+	Graph pat, g;       // Pattern \& DBGraph
+	Graph revpat, revg; // Reversed Pattern \& DBGraph
+};
+\end{lstlisting}
+
+\subsubsection{设计}
+
+\paragraph{变量} 变量命名按照论文\cite{bib:vf2paper}的变量名称进行命名。为了使得程序更快，本文选择用开全局变量的方式代替传递参数的方式，所以VF2类中有大量的临时变量，临时变量就不介绍了，这里仅介绍有意义的主要变量。
+\begin{itemize}
+  \item $DBGraph$：图的数据库，使用链式前向星存储
+  \item $QueryGraph$：当前进行query的图模式
+  \item $QueryID$：当前进行query的图模式的编号
+  \item $match$：query的匹配结果（包括匹配的数量，以及点-点映射的结果）
+  \item $pat$：模式图
+  \item $g$：目标图
+  \item $revpat$：模式图的反向图
+  \item $revg$：目标图的反向图
+\end{itemize}
+
+\paragraph{方法}
+\begin{itemize}
+  \item $init$：
+  \item $vf2$：
+  \item $GenRevGraph$：
+  \item $CheckPrev$：
+  \item $CheckSucc$：
+  \item $CheckIn$：
+  \item $CheckOut$：
+  \item $CheckNew$：
+  \item $CalDFSVec$：
+  \item $CalCheckVec$：
+  \item $check$：
+  \item $GenPairs$：
+  \item $CheckPairs$：
+  \item $UpdateState$：
+  \item $FinalCheck$：
+  \item $dfs$：
+  \item $query$：
+\end{itemize}
+
+
+\subsection{程序主驱动-类：Solver}
+
+\subsubsection{定义代码}
+\begin{lstlisting}[language=c++]
+class Solver
+{
+public:
+	void init(); // init
+	void input(); // input
+	void solve(); // solve
+	void output(); // output
+
+private:
+	void ReadFile(string path, vector<Graph> &vec); // Read file from path, write graph data to vec
+	void ReadDB(string path); // Read DB file
+	void ReadQuery(string path); // Read Query file
+
+	void PrintQueryAns(int id, int cnt); // Pring query ans, id = query file id, cnt = match num
+
+private:
+	VF2 vf2; // VF2 main component
+	string dbPath; // DB file path
+	vector<string> queryPath; // Query file path vector
+	vector<string> outputPath; // Output ans file path
+
+	vector<Graph> DBGraph; // Store DB
+	vector<Graph> QueryGraph; // Store Query
+};
+\end{lstlisting}
+
+\subsubsection{设计}
+Solver类是整个程序的主驱动，包含了读取输入文件，运行VF2，输出运行时间和运行结果。从Data文件夹读取输入数据，将匹配结果输出到Output文件夹中，对每个query文件的匹配结果输出一个文件。并将运行时间输出至time.txt中。
+
+\paragraph{变量}
+\begin{itemize}
+  \item $vf2$：VF2类的对象，VF2算法
+  \item $dbPath$：图的数据库文件路径
+  \item $queryPath$：query的模式图的文件路径集合
+  \item $outputPath$：query输出的文件路径集合
+  \item $DBGraph$：读入的图的数据库，使用链式前向星存储
+  \item $QueryGraph$：读入的一个query的模式图
+\end{itemize}
+
+\paragraph{方法}
+\begin{itemize}
+  \item $init$：
+  \item $input$：
+  \item $solve$：
+  \item $output$：
+  \item $ReadFile$：
+  \item $ReadDB$：
+  \item $ReadQuery$：
+  \item $PrintQueryAns$：
+\end{itemize}
+
+
+\section{实验}
+\subsection{测试数据}
+实验选择graphDB数据集进行运行时间测试，选择graphDB数据集的一个子集进行正确性测试。
+
+graphDB数据集包括大小为10000个图的图数据库文件"mygraphdb.data"，以及6个query图数据文件"Q4.my"，"Q8.my"，"Q12.my"，"Q16.my"，"Q20.my"，"Q24.my"。
+
+\subsection{测试环境}
+使用的计算机硬件和软件配置如表\ref{tab:environment}所示。
+
+\begin{table}[H]
+  \centering
+  \caption{\zihaowu 测试环境（计算机配置和编译环境）}
+    \begin{tabular}{L{3cm}|L{10cm}}
+    \toprule
+    项目  & 详细信息\\
+    \midrule
+    CPU   & Core i7-2630QM (2.0GHz, 4 Cores, 6MB L3 Cache) \\
+    内存    & 16GB DDR3 1600MHz \\
+    测试所用磁盘 & 480GB Sandisk Extreme Pro SSD (Read: 550MB/s) \\
+    操作系统  & Windows 10 Professional x64 Build 10240 \\
+    C/C++编译器 & Microsoft Visual Studio 2015 \\
+    C++版本 & 需支持C++11 \\
+    \bottomrule
+    \end{tabular}%
+  \label{tab:environment}%
+\end{table}%
+
+该代码已上传至BitBucket的私有仓库，课程结束后会开源。
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=400 pt]{repo.jpg}
+  \caption{\zihaowu BitBucket私有仓库}\label{fig:repo}
+\end{figure}
+
+\subsection{实验结果}
+
+\subsubsection{正确性测试}
+
+
+
+\subsubsection{运行速度测试}
+本文对程序做了以下运行速度测试：
+\begin{itemize}
+  \item "Q4.my","Q8.my","Q12.my","Q16.my","Q20.my","Q24.my"文件的一个query在数据库中匹配一个图的时间，如图\ref{fig:ex11}所示。
+  \item "Q4.my","Q8.my","Q12.my","Q16.my","Q20.my","Q24.my"文件的一个query在数据库中匹配所有图的时间，如图\ref{fig:ex1all}所示。
+  \item 由于每个query文件全跑完的时间太久，所以本文仅将"Q4.my"完整的跑完，并给出了运行时间，共花费了$24617.9s$。
+\end{itemize}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=400 pt]{repo.jpg}
+  \caption{\zihaowu 一个query在数据库中匹配一个图的时间}\label{fig:ex11}
+\end{figure}
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[width=400 pt]{repo.jpg}
+  \caption{\zihaowu 一个query在数据库中匹配所有图的时间}\label{fig:ex1all}
+\end{figure}
+
+\section{总结}
+
+
+
+
+\newpage
+
+\begin{thebibliography}{100}
+\bibitem[1]{bib:vf2paper}Cordella L P, Foggia P, Sansone C, et al. A (sub) graph isomorphism algorithm for matching large graphs[J]. Pattern Analysis and Machine Intelligence, IEEE Transactions on, 2004, 26(10): 1367-1372.
+\end{thebibliography}
+
+\end{document}
