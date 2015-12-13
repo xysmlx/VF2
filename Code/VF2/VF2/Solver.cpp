@@ -1,6 +1,6 @@
 #include "Solver.h"
 
-void Solver::init()
+void Solver::init(bool _isOutput)
 {
 	ofstream fout;
 	fout.open("time.txt");
@@ -10,6 +10,8 @@ void Solver::init()
 	DBGraph.clear();
 	QueryGraph.clear();
 	outputPath.clear();
+
+	isOutput = _isOutput;
 }
 
 void Solver::ReadFile(string path, vector<Graph> &vec)
@@ -114,7 +116,7 @@ void Solver::PrintQueryAns(int id, int cnt)
 	// Not output match details
 	fout << "Match List:" << endl;
 	for (int i = 0;i < (int)vf2.match.size();i++)
-		fout << vf2.QueryID << " " << vf2.match[i].id << endl;
+		fout << vf2.QueryID << " " << vf2.match[i] << endl;
 
 	// Output match details
 	//for (int i = 0;i < (int)vf2.match.size();i++)
@@ -149,9 +151,9 @@ void Solver::solve()
 		time_t stTime = clock();
 		for (int i = 0;i < (int)QueryGraph.size();i++)
 		{
-			cout <<"Query "<< queryPath[_] << ": " << i << endl;
-			int cnt = vf2.vf2(QueryGraph[i], i);
-			PrintQueryAns(_, cnt);
+			cout << "Query " << queryPath[_] << ": " << i << endl;
+			int cnt = vf2.vf2(QueryGraph[i], i, isOutput);
+			if (isOutput) PrintQueryAns(_, cnt);
 		}
 		time_t edTime = clock();
 		double dur = (double)(edTime - stTime) / 1000.0;

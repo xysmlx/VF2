@@ -4,7 +4,8 @@ Solver solver;
 
 void init()
 {
-	solver.init();
+	// 0: no output matching ans, 1: output matching ans
+	solver.init(0);
 }
 
 void input()

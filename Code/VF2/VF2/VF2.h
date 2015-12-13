@@ -40,7 +40,7 @@ public:
 public:
 	VF2() {}
 	void init(const vector<Graph> &db);             // Init the VF2 class
-	int vf2(const Graph &QG, const int &QID);       // Run VF2 on QueryGraph & DBGraph (engine)
+	int vf2(const Graph &QG, const int &QID, bool isOutput = 0);       // Run VF2 on QueryGraph & DBGraph (engine)
 
 private:
 	void GenRevGraph(const Graph &src, Graph &dst); // Generate reversed graph
@@ -64,7 +64,7 @@ public:
 	Graph QueryGraph;      // Graph for query, pattern
 	int QueryID;           // Store the Query ID
 
-	vector<Match> match; // Store the matched graph info
+	vector<int> match; // Store the matched graph info
 
 private:
 	// Temp var

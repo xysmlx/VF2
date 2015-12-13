@@ -505,7 +505,7 @@ bool VF2::query()
 	return dfs(State());
 }
 
-int VF2::vf2(const Graph &QG, const int &QID)
+int VF2::vf2(const Graph &QG, const int &QID, bool isOutput)
 {
 	QueryGraph = QG;
 	QueryID = QID;
@@ -522,7 +522,7 @@ int VF2::vf2(const Graph &QG, const int &QID)
 		if (query()) // Matched
 		{
 			//cout << QID << " " << i << endl;
-			//match.push_back(Match(tlist, i));
+			if(isOutput) match.push_back(i);
 			ret++;
 		}
 	}

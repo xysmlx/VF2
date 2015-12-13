@@ -8,7 +8,7 @@
 class Solver
 {
 public:
-	void init(); // init
+	void init(bool _isOutput = 0); // init
 	void input(); // input
 	void solve(); // solve
 	void output(); // output
@@ -21,6 +21,7 @@ private:
 	void PrintQueryAns(int id, int cnt); // Pring query ans, id = query file id, cnt = match num
 
 private:
+	bool isOutput; // Is output the matching ans?
 	VF2 vf2; // VF2 main component
 	string dbPath; // DB file path
 	vector<string> queryPath; // Query file path vector

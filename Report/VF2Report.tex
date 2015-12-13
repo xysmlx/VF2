@@ -4,7 +4,7 @@
 \usepackage[colorlinks,bookmarksnumbered=true,bookmarksopen=true,CJKbookmarks=true,linkcolor=red,anchorcolor=black,citecolor=black]{hyperref}
 \usepackage{amsthm}
 \usepackage{graphicx}
-\usepackage{amsmath}
+\usepackage[fleqn]{amsmath}
 \usepackage{ccmap}
 \usepackage{listings}
 \usepackage{color}
@@ -143,12 +143,89 @@ Git (Remote): \url{https://xysmlx@bitbucket.org/xysmlx/vf2.git}
 VF2ÊÇ×ÓÍ¼Æ¥ÅäµÄËã·¨£¬×ÓÍ¼Æ¥ÅäµÄ¶¨ÒåÈç¶¨Òå\ref{def:subgraphiso}ËùÊ¾¡£VF2µÄÁ÷³ÌÓÃÒ»¾ä»°¸ÅÀ¨£¬¾ÍÊÇËÑËØ+¼ôÖ¦¡£ÆäËã·¨µÄÖ÷¿ò¼ÜÈçËã·¨\ref{alg:vf2}ËùÊ¾¡£Æä¼ôÖ¦µÄ·½·¨ÈçÊ½\ref{equ:vf21}-\ref{equ:vf25}ËùÊ¾¡£
 
 \begin{defn}
-a
+¸ø¶¨Í¼$Q=(V(Q),E(Q),L_V,F)$ºÍÍ¼$G=(V(G),E(G),L_V,F)$£¬µ±ÇÒ½öµ±´æÔÚÒ»¸öÓ³Éä$g:V(Q)\rightarrow V(G)$Ê¹µÃ
+$$
+\forall x\in V(Q), F(v)=F'(g(v))
+$$
+ÇÒ
+$$
+\forall v_1,v_2\in V(Q),\overrightarrow{v_1v_2}\in E(Q) \Rightarrow \overrightarrow{g(v_1)g(v_2)}\in E(G)
+$$
 \label{def:subgraphiso}
 \end{defn}
 
+\begin{equation}\label{equ:vf21}
+ \begin{aligned}
+R_{pred}(s,n,m)\Leftrightarrow & \\
+&(\forall n'\in M_1(s)\cap Pred(G_1,n), \exists m'\in Pred(G_2,m)|(n',m')\in M(s))\wedge \\
+&(\forall m'\in M_2(s)\cap Pred(G_1,m), \exists n'\in Pred(G_1,n)|(n',m')\in M(s))
+ \end{aligned}
+\end{equation}
+
+\begin{equation}\label{equ:vf22}
+ \begin{aligned}
+R_{succ}(s,n,m)\Leftrightarrow & \\
+&(\forall n'\in M_1(s)\cap Succ(G_1,n), \exists m'\in Succ(G_2,m)|(n',m')\in M(s))\wedge \\
+&(\forall m'\in M_2(s)\cap Succ(G_1,m), \exists n'\in Succ(G_1,n)|(n',m')\in M(s))
+ \end{aligned}
+\end{equation}
+
+\begin{equation}\label{equ:vf23}
+ \begin{aligned}
+R_{in}(s,n,m)\Leftrightarrow &\\
+&(Card(Succ(G_1,n))\cap T_1^{in}(s) \geq Card(Succ(G_2,m))\cap T_2^{in}(s))\wedge \\
+&(Card(Pred(G_1,n))\cap T_1^{in}(s) \geq Card(Pred(G_2,m))\cap T_2^{in}(s))
+ \end{aligned}
+\end{equation}
+
+\begin{equation}\label{equ:vf24}
+ \begin{aligned}
+R_{out}(s,n,m)\Leftrightarrow &\\
+&(Card(Succ(G_1,n))\cap T_1^{out}(s) \geq Card(Succ(G_2,m))\cap T_2^{out}(s))\wedge \\
+&(Card(Pred(G_1,n))\cap T_1^{out}(s) \geq Card(Pred(G_2,m))\cap T_2^{out}(s))
+ \end{aligned}
+\end{equation}
+
+\begin{equation}\label{equ:vf25}
+ \begin{aligned}
+R_{new}(s,n,m)\Leftrightarrow &\\
+&(Card(\tilde{N_1}\cap Pred(G_1,n)) \geq Card(\tilde{N_2}\cap Pred(G_2,n)))\wedge \\
+&(Card(\tilde{N_1}\cap Succ(G_1,n)) \geq Card(\tilde{N_2}\cap Succ(G_2,n)))
+ \end{aligned}
+\end{equation}
 
 
+ÆäÖĞ£¬¹«Ê½\ref{equ:vf21}-\ref{equ:vf22}±£Ö¤ÁËÁ½Í¼Í¬¹¹£¬¹«Ê½\ref{equ:vf23}-\ref{equ:vf25}Îª¼ôÖ¦Ìõ¼ş¡£
+
+VF2Ëã·¨Á÷³ÌÈçËã·¨\ref{alg:vf2}ËùÊ¾¡£
+
+\begin{algorithm}[H]
+\caption{VF2}
+\label{alg:vf2}
+\KwIn{Í¼$Q$, Í¼$G$}
+\KwOut{Æ¥Åä¹ØÏµ}
+\Fn{VF2($Q$,$G$)}
+{
+    Match($s_0$)\;
+}
+\Fn{Match($s$)}
+{
+    \If{M($s$)¸²¸ÇÁË$Q$µÄËùÓĞµã}
+    {
+        Output M($s$)\;
+        return \;
+    }
+    ¸ù¾İ$s$¼ÆËãºòÑ¡½ÚµãÆ¥Åä¼¯ºÏ$P(s)$\;
+    \For{$p\in P(s)$}
+    {
+        \If{Âú×ã¹«Ê½\ref{equ:vf21}-\ref{equ:vf25}}
+        {
+            ¸üĞÂ×´Ì¬$s$µÃµ½ĞÂ×´Ì¬$s'$\;
+            Match($s'$)\;
+        }
+    }
+}
+\end{algorithm}
 
 \section{³ÌĞòÊµÏÖ}
 \subsection{Í¼-Àà£ºclass Graph}
@@ -298,7 +375,7 @@ public:
 public:
 	VF2() {}
 	void init(const vector<Graph> &db);             // Init the VF2 class
-	int vf2(const Graph &QG, const int &QID);       // Run VF2 on QueryGraph \& DBGraph (engine)
+	int vf2(const Graph &QG, const int &QID, bool isOutput = 0);       // Run VF2 on QueryGraph \& DBGraph (engine)
 
 private:
 	void GenRevGraph(const Graph &src, Graph &dst); // Generate reversed graph
@@ -322,7 +399,7 @@ public:
 	Graph QueryGraph;      // Graph for query, pattern
 	int QueryID;           // Store the Query ID
 
-	vector<Match> match; // Store the matched graph info
+	vector<int> match; // Store the matched graph info
 
 private:
 	// Temp var
@@ -360,23 +437,23 @@ private:
 
 \paragraph{·½·¨}
 \begin{itemize}
-  \item $init$£º
-  \item $vf2$£º
-  \item $GenRevGraph$£º
-  \item $CheckPrev$£º
-  \item $CheckSucc$£º
-  \item $CheckIn$£º
-  \item $CheckOut$£º
-  \item $CheckNew$£º
-  \item $CalDFSVec$£º
-  \item $CalCheckVec$£º
-  \item $check$£º
-  \item $GenPairs$£º
-  \item $CheckPairs$£º
-  \item $UpdateState$£º
-  \item $FinalCheck$£º
-  \item $dfs$£º
-  \item $query$£º
+  \item $init$£º³õÊ¼»¯VF2
+  \item $vf2$£ºVF2Ëã·¨µÄÖ÷¿Ø
+  \item $GenRevGraph$£º¸ù¾İ´«ÈëµÄÍ¼£¬Éú³ÉÕâ¸öÍ¼µÄ·´ÏòÍ¼£¨°Ñ±ß·´Ïò£©£¬·´ÏòÍ¼ÓÃÓÚÔÚÁ´Ê½Ç°ÏòĞÇÖĞ¿ìËÙ²éÑ¯·´Ïò±ß
+  \item $CheckPrev$£ºÅĞ¶¨×´Ì¬ÊÇ·ñÂú×ã¹«Ê½\ref{equ:vf21}
+  \item $CheckSucc$£ºÅĞ¶¨×´Ì¬ÊÇ·ñÂú×ã¹«Ê½\ref{equ:vf22}
+  \item $CheckIn$£ºÅĞ¶¨×´Ì¬ÊÇ·ñÂú×ã¹«Ê½\ref{equ:vf23}
+  \item $CheckOut$£ºÅĞ¶¨×´Ì¬ÊÇ·ñÂú×ã¹«Ê½\ref{equ:vf24}
+  \item $CheckNew$£ºÅĞ¶¨×´Ì¬ÊÇ·ñÂú×ã¹«Ê½\ref{equ:vf25}
+  \item $CalDFSVec$£º¼ÆËãÓÃÓÚÅĞ¶¨¹«Ê½\ref{equ:vf21}-\ref{equ:vf25}µÄ¸÷¸ö±äÁ¿Êı×é£¬ÀëÏß¼ÆËã£¬¼õĞ¡Ê±¼ä¸´ÔÓ¶È
+  \item $CalCheckVec$£º¼ÆËãÓÃÓÚÅĞ¶¨¹«Ê½\ref{equ:vf21}-\ref{equ:vf25}µÄ¸÷¸ö±äÁ¿Êı×é£¬ÀëÏß¼ÆËã£¬¼õĞ¡Ê±¼ä¸´ÔÓ¶È
+  \item $check$£ºÅĞ¶¨×´Ì¬ÊÇ·ñÂú×ã¹«Ê½\ref{equ:vf21}-\ref{equ:vf25}£¬ÒÔ¼°µãµÄlabelÊÇ·ñÆ¥Åä
+  \item $GenPairs$£ºÉú³ÉËùÓĞºòÑ¡µã¶Ô¼¯ºÏ
+  \item $CheckPairs$£ºÉ¸Ñ¡GenPairsº¯ÊıÉú³ÉµÄ¼¯ºÏ£¬Éú³É×îÖÕµÄºòÑ¡µã¶Ô¼¯ºÏ$P(s)$£¬ÀëÏß¼ÆËã
+  \item $UpdateState$£º¼ÓÈëÒ»¸öĞÂµÄÆ¥Åä£¬¸üĞÂ×´Ì¬
+  \item $FinalCheck$£ºÅĞ¶¨Á½¸öÍ¼µÄ±ßlabelÊÇ·ñÆ¥Åä
+  \item $dfs$£ºËã·¨\ref{alg:vf2}µÄMatchº¯Êı
+  \item $query$£ºËã·¨\ref{alg:vf2}µÄVF2º¯Êı
 \end{itemize}
 
 
@@ -387,7 +464,7 @@ private:
 class Solver
 {
 public:
-	void init(); // init
+	void init(bool _isOutput = 0); // init
 	void input(); // input
 	void solve(); // solve
 	void output(); // output
@@ -400,6 +477,7 @@ private:
 	void PrintQueryAns(int id, int cnt); // Pring query ans, id = query file id, cnt = match num
 
 private:
+	bool isOutput; // Is output the matching ans?
 	VF2 vf2; // VF2 main component
 	string dbPath; // DB file path
 	vector<string> queryPath; // Query file path vector
@@ -415,6 +493,7 @@ SolverÀàÊÇÕû¸ö³ÌĞòµÄÖ÷Çı¶¯£¬°üº¬ÁË¶ÁÈ¡ÊäÈëÎÄ¼ş£¬ÔËĞĞVF2£¬Êä³öÔËĞĞÊ±¼äºÍÔËĞĞ½á¹û¡
 
 \paragraph{±äÁ¿}
 \begin{itemize}
+  \item $isOutput$£ºÑ¡ÔñÊÇ·ñÊä³öÆ¥Åä½á¹û£¬1±íÊ¾ÊÇ£¬0±íÊ¾·ñ
   \item $vf2$£ºVF2ÀàµÄ¶ÔÏó£¬VF2Ëã·¨
   \item $dbPath$£ºÍ¼µÄÊı¾İ¿âÎÄ¼şÂ·¾¶
   \item $queryPath$£ºqueryµÄÄ£Ê½Í¼µÄÎÄ¼şÂ·¾¶¼¯ºÏ
@@ -425,14 +504,14 @@ SolverÀàÊÇÕû¸ö³ÌĞòµÄÖ÷Çı¶¯£¬°üº¬ÁË¶ÁÈ¡ÊäÈëÎÄ¼ş£¬ÔËĞĞVF2£¬Êä³öÔËĞĞÊ±¼äºÍÔËĞĞ½á¹û¡
 
 \paragraph{·½·¨}
 \begin{itemize}
-  \item $init$£º
-  \item $input$£º
-  \item $solve$£º
-  \item $output$£º
-  \item $ReadFile$£º
-  \item $ReadDB$£º
-  \item $ReadQuery$£º
-  \item $PrintQueryAns$£º
+  \item $init$£º³õÊ¼»¯
+  \item $input$£ºµ÷ÓÃReadDB´ÓÎÄ¼ş¶ÁÈ¡Õû¸ö10000µÄÍ¼Êı¾İ£¬
+  \item $solve$£ºÖ÷¿Ø£¬µ÷ÓÃvf2£¬²¢¼ÆÊ±
+  \item $output$£ºÓÃÓÚÊä³ö£¬Ä¿Ç°ÎŞÓÃ
+  \item $ReadFile$£ºÓÃifstream´ÓÎÄ¼ş¶ÁÈ¡Í¼Êı¾İ
+  \item $ReadDB$£ºµ÷ÓÃReadFile¶ÁÈ¡DBÎÄ¼ş
+  \item $ReadQuery$£ºµ÷ÓÃReadFile¶ÁÈ¡QueryÎÄ¼ş
+  \item $PrintQueryAns$£º´òÓ¡Ò»¸öQueryºÍÕû¸öDBµÄÆ¥Åä½á¹û
 \end{itemize}
 
 
@@ -443,6 +522,7 @@ SolverÀàÊÇÕû¸ö³ÌĞòµÄÖ÷Çı¶¯£¬°üº¬ÁË¶ÁÈ¡ÊäÈëÎÄ¼ş£¬ÔËĞĞVF2£¬Êä³öÔËĞĞÊ±¼äºÍÔËĞĞ½á¹û¡
 graphDBÊı¾İ¼¯°üÀ¨´óĞ¡Îª10000¸öÍ¼µÄÍ¼Êı¾İ¿âÎÄ¼ş"mygraphdb.data"£¬ÒÔ¼°6¸öqueryÍ¼Êı¾İÎÄ¼ş"Q4.my"£¬"Q8.my"£¬"Q12.my"£¬"Q16.my"£¬"Q20.my"£¬"Q24.my"¡£
 
 \subsection{²âÊÔ»·¾³}
+\subsubsection{Ó²¼şÈí¼şÅäÖÃ}
 Ê¹ÓÃµÄ¼ÆËã»úÓ²¼şºÍÈí¼şÅäÖÃÈç±í\ref{tab:environment}ËùÊ¾¡£
 
 \begin{table}[H]
@@ -470,11 +550,82 @@ graphDBÊı¾İ¼¯°üÀ¨´óĞ¡Îª10000¸öÍ¼µÄÍ¼Êı¾İ¿âÎÄ¼ş"mygraphdb.data"£¬ÒÔ¼°6¸öqueryÍ¼Êı
   \caption{\zihaowu BitBucketË½ÓĞ²Ö¿â}\label{fig:repo}
 \end{figure}
 
+\subsubsection{³ÌĞòÊ¹ÓÃËµÃ÷}
+³ÌĞò´Ó/Data¶ÁÈ¡"mygraphdb.data","Q4.my","Q8.my","Q12.my","Q16.my","Q20.my","Q24.my"£¬È»ºó°ÑÔËĞĞÊ±¼äÊä³öµ½"time.txt"£¬¿ÉÑ¡ÊÇ·ñÊä³öÆ¥Åä½á¹û(´úÂëÖĞÑ¡Ïîvf2µÄisOutputÑ¡Ïî)
+
 \subsection{ÊµÑé½á¹û}
 
 \subsubsection{ÕıÈ·ĞÔ²âÊÔ}
+ÕıÈ·ĞÔÑéÖ¤Ê¹ÓÃQ4µÄµÚÒ»¸öºÍDBµÄÒ»Ğ©Êı¾İ½øĞĞÆ¥Åä£¬ÏÂÃæÕ¹Ê¾Q4µÄµÚÒ»¸öÊı¾İºÍDBµÄµÚÒ»¸öÊı¾İµÄÆ¥Åä½á¹û£¬ÈçÏÂËùÊ¾£º
 
+\paragraph{Q4µÚÒ»¸ö}
+\begin{verbatim}
+t # 0
+v 0 2
+v 1 2
+v 2 2
+v 3 2
+v 4 2
+e 0 1 2
+e 1 2 2
+e 2 3 2
+e 3 4 2
+\end{verbatim}
 
+\paragraph{DBµÚÒ»¸ö}
+\begin{verbatim}
+t # 0
+v 0 2
+v 1 2
+v 2 2
+v 3 3
+v 4 2
+v 5 4
+v 6 2
+v 7 3
+v 8 3
+v 9 3
+v 10 2
+v 11 2
+v 12 2
+v 13 2
+v 14 2
+v 15 2
+v 16 2
+v 17 2
+v 18 2
+e 0 1 2
+e 0 2 2
+e 2 3 3
+e 2 4 2
+e 3 5 2
+e 4 6 2
+e 5 7 2
+e 5 8 2
+e 5 9 2
+e 6 10 2
+e 6 9 3
+e 7 11 3
+e 8 12 3
+e 10 13 2
+e 11 14 2
+e 11 15 2
+e 12 16 2
+e 12 15 2
+e 14 17 2
+e 16 18 2
+\end{verbatim}
+
+\paragraph{Æ¥Åä½á¹û}
+\begin{verbatim}
+0 0
+1 2
+2 4
+3 6
+4 10
+\end{verbatim}
+
+ÏÔÈ»Æ¥ÅäÕıÈ·¡£ÓÉÓÚÆª·ùËùÏŞ£¬¾Í²»°ÑËùÓĞµÄ²âÊÔ½á¹ûÕ¹³öÁË¡£²âÊÔÒ»¹²½øĞĞÁË15×é£¬¾ùÕıÈ·¡£
 
 \subsubsection{ÔËĞĞËÙ¶È²âÊÔ}
 ±¾ÎÄ¶Ô³ÌĞò×öÁËÒÔÏÂÔËĞĞËÙ¶È²âÊÔ£º
@@ -486,18 +637,18 @@ graphDBÊı¾İ¼¯°üÀ¨´óĞ¡Îª10000¸öÍ¼µÄÍ¼Êı¾İ¿âÎÄ¼ş"mygraphdb.data"£¬ÒÔ¼°6¸öqueryÍ¼Êı
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=400 pt]{repo.jpg}
-  \caption{\zihaowu Ò»¸öqueryÔÚÊı¾İ¿âÖĞÆ¥ÅäÒ»¸öÍ¼µÄÊ±¼ä}\label{fig:ex11}
+  \includegraphics[width=300 pt]{ex11.eps}
+  \caption{\zihaowu Ò»¸öqueryÔÚÊı¾İ¿âÖĞÆ¥ÅäÒ»¸öÍ¼µÄÊ±¼ä(µ¥Î»£ºs)}\label{fig:ex11}
 \end{figure}
 
 \begin{figure}[H]
   \centering
-  \includegraphics[width=400 pt]{repo.jpg}
-  \caption{\zihaowu Ò»¸öqueryÔÚÊı¾İ¿âÖĞÆ¥ÅäËùÓĞÍ¼µÄÊ±¼ä}\label{fig:ex1all}
+  \includegraphics[width=300 pt]{ex1all.eps}
+  \caption{\zihaowu Ò»¸öqueryÔÚÊı¾İ¿âÖĞÆ¥ÅäËùÓĞÍ¼µÄÊ±¼ä(µ¥Î»£ºs)}\label{fig:ex1all}
 \end{figure}
 
 \section{×Ü½á}
-
+±¾ÎÄÓÃC++ÊµÏÖÁË×ÓÍ¼Æ¥ÅäËã·¨VF2£¬Í¨¹ı¼ÓÈë´óÁ¿ÓÅ»¯£¬±ÈÈç£º¾¡¿ÉÄÜÀëÏß¼ÆËãÊı¾İ¡¢ÓÃÁ´Ê½Ç°ÏòĞÇ´úÌæSTLÊµÏÖµÄÁÚ½Ó±í¡¢¾¡¿ÉÄÜ±£ÁôºóÃæ»áÓÃµ½µÄÊı¾İ¡¢ÓÃ¾¡¿ÉÄÜ¿ìµÄ¿âº¯Êı£¬Ê¹µÃÊµÏÖµÄËã·¨ÔÚÄ³Ğ©Çé¿öÏÂ£¨²éÑ¯µÄÍ¼±È½ÏĞ¡µÄÊ±ºò£©ËÙ¶È±È¿ªÔ´¿âboostµÄVF2Ëã·¨¸ü¿ì¡£Í¨¹ıÕıÈ·ĞÔÊµÑé£¬ÅÜÁË15×éÊı¾İ£¬²¢ÊÖ¶¯ÑéÖ¤£¬·¢ÏÖ15×éÊı¾İ¾ùÕıÈ·£¬¿ÉÒÔÖ¤Ã÷Ëã·¨µÄÕıÈ·ĞÔ¡£
 
 
 
