@@ -38,19 +38,19 @@ void Solver::ReadFile(string path, vector<Graph> &vec)
 		}
 		if (buff[0] == 't')
 		{
-			sscanf(buff.c_str(), "t # %d", &n);
+			sscanf_s(buff.c_str(), "t # %d", &n);
 			if (n == 0) continue;
 			vec.push_back(tmp);
 			tmp.init();
 		}
 		else if (buff[0] == 'v')
 		{
-			sscanf(buff.c_str(), "v %d %d", &m, &l);
+			sscanf_s(buff.c_str(), "v %d %d", &m, &l);
 			tmp.addv(m, l);
 		}
 		else if (buff[0] == 'e')
 		{
-			sscanf(buff.c_str(), "e %d %d %d", &p, &q, &l);
+			sscanf_s(buff.c_str(), "e %d %d %d", &p, &q, &l);
 			tmp.adde(p, q, l);
 		}
 		else puts("Error!");
